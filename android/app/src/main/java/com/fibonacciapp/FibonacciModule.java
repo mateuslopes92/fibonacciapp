@@ -27,7 +27,8 @@ public class FibonacciModule extends ReactContextBaseJavaModule {
         }
     }
 
-    public static String calculateFibonacci(int inputNumber) {
+    @ReactMethod
+    public String calculateFibonacci(int inputNumber) {
         Log.d("CalendarModule", "calculateFibonacci called with number: " + inputNumber);
         if(inputNumber > 0){
             long result[] = new long[inputNumber];
@@ -35,11 +36,15 @@ public class FibonacciModule extends ReactContextBaseJavaModule {
             // calculate based on inputNumber
             for (int i = 0; i < inputNumber; i++) {
                 result[i] = FibonacciModule.fibo(i);
-                System.out.print("(" + i + "):" + FibonacciModule.fibo(i) + "\t");
             }
+            System.out.print(result);
 
-            return Arrays.toString(result);
+            String str = Arrays.toString(result);
+
+            return str;
         }
+
+
 
         return "Not a valid number";
     }
