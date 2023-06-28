@@ -1,5 +1,6 @@
 import {
-  NativeModules,
+  Alert,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -8,20 +9,43 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 
+import FibonacciModule from './src/FibonacciModule';
+
 const FibonacciApp: React.FC = () => {
-  const [number, setNumber] = useState('');
-  const {FibonacciModule} = NativeModules;
+  const [numbers, setNumbers] = useState('');
+  const [sequence, setSequence] = useState('');
 
   const handleCalc = () => {
-    console.log(FibonacciModule.calculateFibonacci(number));
+    let test;
+    if (Platform.OS === 'ios') {
+      FibonacciModule.calculateFibonacci(Number(numbers), (error, result) => {
+        if (error) {
+          console.error(error);
+          setSequence(error);
+          // Handle the error case
+        } else {
+          console.log(result);
+          setSequence(result);
+          // Handle the success case
+        }
+      });
+    } else {
+      test = FibonacciModule.calculateFibonacci(Number(numbers));
+      setSequence(test);
+    }
+    console.log(test);
   };
+
+  if (sequence) {
+    Alert.alert('Your fibonacci sequence is ', sequence);
+  }
 
   return (
     <View style={styles.container}>
       <Text>Put some number to generate Fibonacci Sequence</Text>
       <TextInput
-        value={number}
-        onChangeText={setNumber}
+        value={numbers}
+        onChangeText={setNumbers}
         style={styles.input}
         keyboardType="decimal-pad"
       />
